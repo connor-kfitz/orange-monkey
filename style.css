@@ -1,0 +1,41 @@
+* {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.flex {
+    display: flex;
+}
+
+#headerBox {
+    border-bottom: solid black 4px;
+    background-color: #ff4d4d;    
+    height: 200px;
+    justify-content: center;
+    align-items: center;
+}
+
+#header {
+    color: white;
+    font-size: 325%;
+}
+
+.employeeCard {
+    border: solid black 5px;
+    border-radius: 4px;
+    margin: 2%;
+    height: 400px;
+    width: 200px;
+    flex-flow: column;
+}
+
+.cardTop {
+    margin-top: 5%;
+    flex-flow: column;
+}
+
+.cardBottom {
+    margin-top: 20%;
+    flex-flow: column;
+}
