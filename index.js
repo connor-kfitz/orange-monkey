@@ -9,7 +9,6 @@ var internQuestions = ['What is the intern\'s name?', 'What is the intern\'s emp
 
 var employeeSelection = '';
 var newEmployee;
-var employeeType;
 
 // Classes
 class Employee {
@@ -32,6 +31,8 @@ class Employee {
     return 'Employee';
   }
 }
+
+module.exports = Employee;
 
 // Sub-Classes
 class Manager extends Employee {
@@ -259,25 +260,8 @@ function addEmployee(){
   })
 }
 
-// function addAnother(){
-//   inquirer
-//   .prompt([
-//     {
-//         type: 'list',
-//         name: 'continue',
-//         message: 'Would you like to add another',
-//     }
-//   ])
-// }
-
-
 function init(){
   managerFunction();
 }
 
-// managerFunction();
-// engineerFunction();
-// internFunction();
 init();
-
-module.exports = Employee;

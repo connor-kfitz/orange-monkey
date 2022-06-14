@@ -1,7 +1,14 @@
-const Employee = require('../testt');
+const Employee = require('../index');
 
 describe('Employee', () => {
-    it('Should return the name of the employee', () => {
-        expect(Employee('Connor', 111111, 'connorkfitzsimmons@gmail.com').getName()).toBe('Connor');
-    })
+    describe('getName', () => {
+        it('Should return the name of the employee', () => {
+            const expected = 'Connor'
+
+            const testEmployee = new Employee('Connor', 111111, 'connorkfitzsimmons@gmail.com');
+            const result = testEmployee.getName();
+
+            expect(result).toBe(expected);
+        });
+    });
 });
