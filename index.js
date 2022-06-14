@@ -1,19 +1,15 @@
 // Import
 const inquirer = require('inquirer');
+const fs = require('fs');
 
 // Variables
 var managerQuestions = ['What is the manager\'s name?', 'What is the manager\'s employee ID?', 'What is the manager\'s email address?', 'What is the manager\'s office number?'];
 var engineerQuestions = ['What is the engineer\'s name?', 'What is the engineer\'s employee ID?', 'What is the engineer\'s email address?', 'What is the engineer\'s Github link?'];
 var internQuestions = ['What is the intern\'s name?', 'What is the intern\'s employee ID?', 'What is the intern\'s email address?', 'What is the intern\'s school?'];
 
-var employeeName = '';
-var employeeRole = '';
-var employeeID = '';
-var employeeEmail = '';
-var employeeInfo = '';
-
 var employeeSelection = '';
 var newEmployee;
+var employeeType;
 
 // Classes
 class Employee {
@@ -104,14 +100,14 @@ var htmlSkeletonEnd = `
 `
 // Functions
 function createHTML(data) {
-    fs.writeFile(filename, data, (err) =>
+    fs.writeFile('index.html', data, (err) =>
       err ? console.log(err) : console.log('Congratulations, your HTML file was successfully created')
     );
 }
 
 function appendEmployeeCard() {
   var htmlEmployeeCard = `
-<div class="flex">
+    <div class="flex">
         <div class = 'employeeCard flex'>
             <div class = 'cardTop flex'>
                 <h1>${newEmployee.getName()}</h1>
@@ -119,34 +115,27 @@ function appendEmployeeCard() {
             </div>
             <div class = 'cardBottom flex'>
                 <p>ID: ${newEmployee.getID()}</p>
-                <p>E-mail: ${newEmployee.getEmail()}</p>`
-+ appendEmployeeSpecific
-`
+                <p>E-mail: ${newEmployee.getEmail()}</p>
+${appendEmployeeSpecific()}
             </div>
         </div>
-    </div>`;
+    </div>
+`;
 
 htmlSkeletonStart += htmlEmployeeCard;
 }
 
 function appendEmployeeSpecific(){
   if(newEmployee.getRole() == 'Manager'){
-    return `
-                <p>Office Number: ${newEmployee.getOfficeNumber()}</p>  
-`
+    return (`                <p>Office Number: ${newEmployee.getOfficeNumber()}</p>`);
   }
   else if(newEmployee.getRole() == 'Engineer'){
-    return `
-                <p>Office Number: ${newEmployee.getGithub()}</p>  
-`
+    return (`                <p>Github Link: ${newEmployee.getGithub()}</p>`);
   }
   else if(newEmployee.getRole() == 'Intern'){
-    return `
-    <p>Office Number: ${newEmployee.getSchool()}</p>  
-`
+    return (`                <p>School: ${newEmployee.getSchool()}</p>`);
   }
 }
-
 
 function managerFunction(){
  inquirer
@@ -175,6 +164,7 @@ function managerFunction(){
  .then((data) => {
   newEmployee = new Manager(data.managerName, data.managerID, data.managerEmail, data.managerOffice);
   appendEmployeeCard();
+  addEmployee();
  })
  
 }
@@ -206,6 +196,7 @@ function engineerFunction(){
  .then((data) => {
   newEmployee = new Engineer(data.engineerName, data.engineerID, data.engineerEmail, data.engineerGithub)
   appendEmployeeCard();
+  addEmployee();
  })
 }
 
@@ -229,19 +220,15 @@ function internFunction(){
     },
     {
       type: 'input',
-      name: 'internOffice',
+      name: 'internSchool',
       message: internQuestions[3],
     }
  ])
  .then((data) => {
-  employeeName = data.internName;
-  employeeRole = 'Intern';
-  employeeID = data.internID;
-  employeeEmail = data.internEmail;
-  employeeInfo = data.internOffice;
+  newEmployee = new Intern(data.internName, data.internID, data.internEmail, data.internSchool)
   appendEmployeeCard();
-  console.log(htmlSkeletonStart);
- })
+  addEmployee();
+})
 }
 
 function addEmployee(){
@@ -257,51 +244,40 @@ function addEmployee(){
   .then((data) => {
     employeeSelection = data.addEmployeePrompt;
     if(employeeSelection == 'Engineer'){
-
+      employeeType = 'Engineer'
+      engineerFunction();
     }
     else if (employeeSelection == 'Intern'){
-
+      employeeType = 'Intern'
+      internFunction();
     }
     else {
-
+      htmlSkeletonStart += htmlSkeletonEnd;
+      createHTML(htmlSkeletonStart);
+      console.log(htmlSkeletonStart);
     }
   })
 }
 
-function addAnother(){
-  inquirer
-  .prompt([
-    {
-        type: 'list',
-        name: 'continue',
-        message: 'Would you like to add another',
-    }
-  ])
-}
-
-// function add
-
-// function init(){
-//   managerFunction();
-//   var employeeType = '';
-//   var i = 1;
-//   addEmployee();
-//   if (employeeSelection = 'Finish'){
-
-//   }
-//   while(i = 1) {
-//     if(employeeType == 'engineer'){
-//       engineerFunction();
+// function addAnother(){
+//   inquirer
+//   .prompt([
+//     {
+//         type: 'list',
+//         name: 'continue',
+//         message: 'Would you like to add another',
 //     }
-//     else if(employeeType == 'intern'){
-//       internFunction();
-//     }
-  
-//   }
+//   ])
 // }
 
 
-managerFunction();
+function init(){
+  managerFunction();
+}
+
+// managerFunction();
 // engineerFunction();
 // internFunction();
-// init();
+init();
+
+module.exports = Employee;
